@@ -12,10 +12,17 @@ class City(Base):
     longitude = Column(Integer)
     accuracy = Column(Integer)
 
-    def __repr__(self):
-        """"""
-        return "<User - '%s': '%s' - '%s'>" % (self.key, self.place_name,
-                                                 self.admin_name1)
+class Geo(Base):
+    __tablename__ = "geo"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    type = Column(String)
+    parent = Column(String)
+    shape = Column(String)
+    latitude = Column(Integer)
+    longitude = Column(Integer)
+    
 
 
 

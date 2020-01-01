@@ -47,3 +47,8 @@ def test3():
         print("Both are returning save json data")
     else:
         print("they are not returning same data")
+        
+
+test1()
+test2()
+test3()

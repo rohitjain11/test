@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
-import models, json, math
+import models, json
+from math import acos, sin, cos
 
 
 # def get_user(db: Session, user_id: int):
@@ -11,7 +12,7 @@ def create_city(db: Session, lat: float, lng: float, pincode: str, address: str,
     
     db_city = models.City(key = pincode, place_name = address, admin_name1 = city, latitude = lat, longitude =lng)
     db.add(db_city)
-    db.commit(db: Session, lat)
+    db.commit()
     db.refresh(db_city)
     return db_city
 
@@ -40,18 +41,13 @@ def get_using_postgres(db: Session, lat: float, lng: float, radius: int ):
 
 def get_using_self(db: Session, lat: float, lng: float, radius: int ):
 
-    def distance(lat1, lng1, lat2, lng2):
-        dlat = math.radians(float(lat2) - lat1)
-        dlng = math.radians(float(lng2) -lng1)
-        a = math.sin(dlat/2) * math.sin(dlng/2) + math.cos(math.radians(lat1)) \
-             * math.cos(math.radians(float(lat2))) * math.sin(dlng/2) * math.sin(dlng/2)
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-        d = 6371 * c
+    def distance(lat1, lng1, lat2, lng2: float):
+        d = acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lng1-lng2))*6371
         return d
 
-    lat
+    db_city = db.query(models.City).all()
     for e in db_city:
-        d = distance(lat1=lat, lng1=lng, lat2=e.latitude, lng2=e.longitude)
+        d = distance(lat1=lat, lng1=lng, lat2=float(e.latitude), lng2=float(e.longitude))
         if d <= 5:
             as_dict = {
                 'key' : e.key,

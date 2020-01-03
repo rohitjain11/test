@@ -20,7 +20,7 @@ def get_db():
 
 @app.get("/")
 async def root(db: Session = Depends(get_db)):
-    return crud.get_using_postgres(db=db)
+    return geojson_to_postgres(db=db)
 
 
 @app.post("/post_location/")
